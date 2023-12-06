@@ -92,14 +92,18 @@ for i in range(len(trash)):
         fill_opacity=0.5,
         popup=folium.Popup(popup_html,max_width=300)
     ).add_to(m)
-# 지도 표시
-st.markdown(f"<h3 style='text-align: center;'>[{region} 연도별 해양쓰레기 지도]</h3>", unsafe_allow_html=True)
-folium_static(m)
 
-# 연도별 쓰레기 총량 그래프
-st.write(f'  - {year}년 총 무게: {quan.무게[0]}')
+# linechart 출력
+
 quan2 = df.groupby('년도')['무게'].sum().reset_index()
 fig = px.line(quan2, x = '년도', y = '무게', markers=True, line_shape="linear")
-st.markdown("---")
+
 st.markdown(f"<h3 style='text-align: center;'>[연도별 쓰레기 총량]</h3>", unsafe_allow_html=True)
 st.write(fig)
+st.markdown("---")
+# 지도 표시
+st.markdown(f"<h3 style='text-align: center;'>[연도별 해양쓰레기 지도]</h3>", unsafe_allow_html=True)
+folium_static(m)
+st.write(f'  - {year}년 총 무게: {quan.무게[0]}')
+
+# 연도별 쓰레기 총량 그래프

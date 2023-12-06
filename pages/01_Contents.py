@@ -16,8 +16,8 @@ from plotly.validators.scatter.marker import SymbolValidator # Symbol 꾸미기�
 import folium
 from streamlit_folium import folium_static
 import random
-df = pd.read_csv("data.csv", encoding='cp949')
-rawdf = pd.read_csv("raw_data.csv", encoding='cp949')
+df = pd.read_csv("../woori_marine/data.csv", encoding='cp949')
+rawdf = pd.read_csv("../woori_marine/raw_data.csv", encoding='cp949')
 df['년도'] = df['년도'].astype(str)
 provinces = df.팔도.unique()
 colors = px.colors.qualitative.Plotly[:len(df.지역.unique())]

@@ -18,8 +18,24 @@ from plotly.validators.scatter.marker import SymbolValidator # Symbol 꾸미기�
 df = pd.read_csv("data.csv", encoding='cp949')
 colors = px.colors.qualitative.Plotly[:len(df.지역.unique())]
 
-with st.sidebar:
-    st.header("지역별 해양 쓰레기")
-    region = st.selectbox("지역을 선택하세요.", df.지역.unique())
-    button_result = st.button('추가 데이터 확인')
 
+with st.sidebar:
+    #메뉴1: 지역별 해양 쓰레기 barchart
+    with st.container():
+        st.header("지역별 해양 쓰레기")
+        region = st.selectbox("지역을 선택하세요.", df.지역.unique())
+        button_result = st.button('추가 데이터 확인')
+
+    st.divider() 
+
+    with st.container():
+        st.header("연도 별 해양 쓰레기 지도")
+        region = st.selectbox("연도", df.연도.unique())
+        button_result = st.button('추가 데이터 확인')
+    #메뉴2: 연도별 해양 쓰레기 지도
+    
+
+
+#함수1: 지역별 해양쓰레기
+
+#함수2: 연도별 해양쓰레기 

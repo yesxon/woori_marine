@@ -15,12 +15,12 @@ from plotly.subplots import make_subplots # subplot 만들기
 from plotly.validators.scatter.marker import SymbolValidator # Symbol 꾸미기에 사용됨
 import folium
 from streamlit_folium import folium_static
-
+import random
 df = pd.read_csv("data.csv", encoding='cp949')
+rawdf = pd.read_csv("raw_data.csv", encoding='cp949')
 df['년도'] = df['년도'].astype(str)
 provinces = df.팔도.unique()
 colors = px.colors.qualitative.Plotly[:len(df.지역.unique())]
-
 
 # 사이드바 생성
 with st.sidebar:
@@ -36,8 +36,9 @@ with st.sidebar:
     st.divider()
 
     # 메뉴2: 연도별 해양 쓰레기 지도
-    with st.expander("연도 별 해양 쓰레기 지도"):
-        year = st.selectbox("연도", df['년도'].unique())
+    with st.expander("연도별 해양 쓰레기 지도"):
+        year = st.slider('연도를 설정해 주세요.', min_value=2018, max_value=2022)
+
 
 
 #함수1: 지역별 해양쓰레기
@@ -56,33 +57,49 @@ if province and region:
                             name='증감 추이')
     fig.add_trace(line_chart)
 
-    fig.update_layout(title_text=f'{region} 연도별 무게 비교')
-
+    # fig.update_layout(title_text=f'{region} 연도별 무게 비교')
+    st.markdown(f"<h3 style='text-align: center;'>[{region} 연도별 무게 비교]</h3>", unsafe_allow_html=True)
     st.plotly_chart(fig)
-
+st.markdown("---")
 #함수2: 연도별 해양쓰레기 
-st.title('해양쓔레기')
-# df['년도'] = df['년도'].astype(str)
-year = st.slider('Slide me', min_value=2018, max_value=2022)
-trash = df.loc[df["년도"] == str(year)]
+df = pd.read_csv("data.csv", encoding='cp949')
+
+trash = df.loc[df["년도"] == year]
 # 'Value' 열을 문자열로 변환
 trash['무게'] = trash['무게'].astype(str)
 trash = trash.reset_index(drop=True)
 # 지도 초기화
-# st.write(df)
-# st.write(trash_2018)
+trash['무게'] = trash['무게'].astype(float)
+quan = trash.groupby('년도')['무게'].sum().reset_index()
+        
 
-m = folium.Map(location=[36.5, 127.5], zoom_start=7.2,control_scale=False, zoom_control = False, scrollWheelZoom=False)
+
+m = folium.Map(location=[36.5, 127.5], zoom_start=6,control_scale=False, zoom_control = True, scrollWheelZoom=False)
 # 버블 차트를 지도에 추가
 for i in range(len(trash)):
+    color = "#{:06x}".format(random.randint(0, 0xFFFFFF))
+    popup_html = f"""
+            <b>지역:</b> {trash['지역'][i]}<br>
+            <b>무게:</b> {trash['무게'][i]}<br>
+            <b>년도:</b> {trash['년도'][i]}
+        """
     folium.CircleMarker(
         location=[trash['위도'][i], trash['경도'][i]],
-        radius=float(trash['무게'][i])/20,  # 'Value'를 다시 float 형태로 변환
-        color= None,
+        radius=float(trash['무게'][i])/15,  # 'Value'를 다시 float 형태로 변환
+        color=None,
         fill=True,
-        fill_color='blue',
+        fill_color=color,
         fill_opacity=0.5,
-        popup=f"{trash['지역'][i]}: {trash['무게'][i]}"
-    ).add_child(folium.Popup(f"{trash['지역'][i]}: {trash['무게'][i]}", parse_html=True)).add_to(m)
+        popup=folium.Popup(popup_html,max_width=300)
+    ).add_to(m)
 # 지도 표시
+st.markdown(f"<h3 style='text-align: center;'>[{region} 연도별 해양쓰레기 지도]</h3>", unsafe_allow_html=True)
 folium_static(m)
+
+# 연도별 쓰레기 총량 그래프
+st.write(f'  - {year}년 총 무게: {quan.무게[0]}')
+quan2 = df.groupby('년도')['무게'].sum().reset_index()
+fig = px.line(quan2, x = '년도', y = '무게', markers=True, line_shape="linear")
+st.markdown("---")
+st.markdown(f"<h3 style='text-align: center;'>[연도별 쓰레기 총량]</h3>", unsafe_allow_html=True)
+st.write(fig)

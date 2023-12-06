@@ -68,7 +68,6 @@ st.title('해양쓔레기')
 # df['년도'] = df['년도'].astype(str)
 trash = df.loc[df["년도"] == year]
 # 'Value' 열을 문자열로 변환
-trash['무게'] = trash['무게'].astype(str)
 trash = trash.reset_index(drop=True)
 # 지도 초기화
 # st.write(df)

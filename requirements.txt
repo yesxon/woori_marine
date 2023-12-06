@@ -1,9 +1,19 @@
 streamlit
-finance-datareader
+datetime
+matplotlib.pyplot
 matplotlib 
-plotly
-pandas
+io
+BytesIO 
+plotly.graph_objects
 openpyxl
-beautifulsoup4
-html5lib
+pandas
+plotly.figure_factory
+plotly.io # Plotly input output
+plotly.express # 빠르게 그리는 방법
 folium
+streamlit_folium
+folium_static
+random
+PIL
+Image
+Plotly

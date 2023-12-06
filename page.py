@@ -17,6 +17,7 @@ import folium
 from streamlit_folium import folium_static
 
 df = pd.read_csv("data.csv", encoding='cp949')
+df['년도'] = df['년도'].astype(str)
 provinces = df.팔도.unique()
 colors = px.colors.qualitative.Plotly[:len(df.지역.unique())]
 
@@ -40,10 +41,6 @@ with st.sidebar:
 
 
 #함수1: 지역별 해양쓰레기
-df['년도'] = df['년도'].astype(str)
-provinces = df.팔도.unique()
-
-
 if province and region:
     fig = px.bar(df[df['지역']==region], 
              x="년도", 
@@ -66,8 +63,10 @@ if province and region:
 #함수2: 연도별 해양쓰레기 
 st.title('해양쓔레기')
 # df['년도'] = df['년도'].astype(str)
-trash = df.loc[df["년도"] == year]
+year = st.slider('Slide me', min_value=2018, max_value=2022)
+trash = df.loc[df["년도"] == str(year)]
 # 'Value' 열을 문자열로 변환
+trash['무게'] = trash['무게'].astype(str)
 trash = trash.reset_index(drop=True)
 # 지도 초기화
 # st.write(df)

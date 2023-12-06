@@ -1,5 +1,4 @@
 import streamlit as st
-import FinanceDataReader as fdr
 import datetime
 import matplotlib.pyplot as plt
 import matplotlib 
@@ -18,23 +17,27 @@ from plotly.validators.scatter.marker import SymbolValidator # Symbol 꾸미기�
 df = pd.read_csv("data.csv", encoding='cp949')
 colors = px.colors.qualitative.Plotly[:len(df.지역.unique())]
 
+data = {
+    '지역': ['지역A', '지역B', '지역C'],
+    '연도': [2020, 2021, 2022],
+}
+df1 = pd.DataFrame(data)
 
+# 사이드바 생성
 with st.sidebar:
-    #메뉴1: 지역별 해양 쓰레기 barchart
-    with st.container():
-        st.header("지역별 해양 쓰레기")
-        region = st.selectbox("지역을 선택하세요.", df.지역.unique())
+    st.header('메뉴')
+
+    # 메뉴1: 지역별 해양 쓰레기 barchart
+    with st.expander("지역별 해양 쓰레기"):
+        region = st.selectbox("지역을 선택하세요.", df1['지역'].unique())
         button_result = st.button('추가 데이터 확인')
 
-    st.divider() 
+    st.divider()
 
-    with st.container():
-        st.header("연도 별 해양 쓰레기 지도")
-        region = st.selectbox("연도", df.연도.unique())
-        button_result = st.button('추가 데이터 확인')
-    #메뉴2: 연도별 해양 쓰레기 지도
-    
-
+    # 메뉴2: 연도별 해양 쓰레기 지도
+    with st.expander("연도 별 해양 쓰레기 지도"):
+        year = st.selectbox("연도", df1['연도'].unique())
+        button_result = st.button('데이터 확인')
 
 #함수1: 지역별 해양쓰레기
 

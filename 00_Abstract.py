@@ -30,7 +30,7 @@ st.markdown(
 )
 
 # 이미지 로드
-image = Image.open("spot.jpg")  # 이미지 파일 경로에 맞게 수정
+image = Image.open("spot.JPG")  # 이미지 파일 경로에 맞게 수정
 
 st.markdown("<h1 style='text-align: center;'>연도·지역별 해양쓰레기 조사량<br>시각화 보고서</h1>", unsafe_allow_html=True)
 st.markdown("---")

@@ -14,7 +14,7 @@ import plotly.figure_factory as ff # 템플릿 불러오기
 from plotly.subplots import make_subplots # subplot 만들기
 from plotly.validators.scatter.marker import SymbolValidator # Symbol 꾸미기에 사용됨
 
-df = pd.read_csv("data.csv", encoding='cp949', skiprows=1, skipfooter=1, engine='python')
+df = pd.read_csv("data.csv", encoding='cp949')
 colors = px.colors.qualitative.Plotly[:len(df.지역.unique())]
 
 data = {
